@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @DiscriminatorColumn(name= "type_mbr", discriminatorType = DiscriminatorType.STRING,length = 3)
-public  abstract class Member implements Serializable {
+public class Member implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

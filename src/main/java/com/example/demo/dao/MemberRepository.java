@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository("member")
 public interface MemberRepository extends JpaRepository<Member,Long> {
-    List<Member> findByCin(String cin);
+    Member findByCin(String cin);
     List<Member> findByNomStartingWith(String caractere);
-    List<Member> findByEmail(String email);
+   Member findByEmail(String email);
 }
