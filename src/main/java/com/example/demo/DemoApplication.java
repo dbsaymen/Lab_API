@@ -2,11 +2,9 @@ package com.example.demo;
 
 import com.example.demo.dao.MemberRepository;
 import com.example.demo.dao.RoleRepository;
-import com.example.demo.entity.EnseignantChercheur;
-import com.example.demo.entity.Etudiant;
-import com.example.demo.entity.Member;
-import com.example.demo.entity.Role;
+import com.example.demo.entity.*;
 import com.example.demo.services.IMemberService;
+import com.example.demo.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +24,8 @@ public class DemoApplication implements CommandLineRunner {
     MemberRepository memberRepository;
     @Autowired
     IMemberService iMemberService;
+    @Autowired
+    IPublicationService publicationService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,6 +39,9 @@ public class DemoApplication implements CommandLineRunner {
         EnseignantChercheur m3 = new EnseignantChercheur("321654","Ben salem","Aymen",new Date(),"cv1.pdf",null,"test@mail.com","password");
         Member s3 = iMemberService.addMember(m2);
         Member e = iMemberService.findMember(1L);
+        publicationService.addPub(new Publication("type1", new Date(), "lien1", "source1.pdf"));
+        publicationService.addPub(new Publication("type2", new Date(), "lien2", "source1.pdf"));
+
 
         //System.out.println("old Cin:"+e.getCin());
         //e.setCin("000000000");

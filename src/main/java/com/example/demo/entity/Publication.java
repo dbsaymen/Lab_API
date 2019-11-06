@@ -24,6 +24,8 @@ public class Publication implements Serializable {
     private String sourcePdf;
     @ManyToMany(cascade = CascadeType.ALL)
     private Collection<Member> auteurs;
+
+
     public Long getId() {
         return id;
     }
@@ -70,6 +72,9 @@ public class Publication implements Serializable {
     public Publication() {
         super();
         // TODO Auto-generated constructor stub
+    }
+    public void addAuthor(Member member){
+        auteurs.add(member);
     }
 
 
