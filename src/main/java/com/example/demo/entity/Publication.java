@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -59,7 +61,7 @@ public class Publication implements Serializable {
     public Collection<Member> getAuteurs() {
         return auteurs;
     }
-    public void setAuteurs(Collection<Member> auteurs) {
+    public void setAuteurs(List<Member> auteurs) {
         this.auteurs = auteurs;
     }
     public Publication(String type, Date dateApparition, String lien, String sourcePdf) {
@@ -74,7 +76,7 @@ public class Publication implements Serializable {
         // TODO Auto-generated constructor stub
     }
     public void addAuthor(Member member){
-        auteurs.add(member);
+        this.auteurs.add(member);
     }
 
 

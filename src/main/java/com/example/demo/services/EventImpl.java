@@ -23,8 +23,8 @@ public class EventImpl implements IEventService {
     }
 
     @Override
-    public List<Evenement> findEvenementBySource(String source) {
-        return evenementRepository.findAllBySource(source);
+    public List<Evenement> findEvenementByLieu(String source) {
+        return evenementRepository.findAllByLieu(source);
     }
 
     @Override

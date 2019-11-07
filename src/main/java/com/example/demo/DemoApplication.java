@@ -10,7 +10,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -41,6 +43,12 @@ public class DemoApplication implements CommandLineRunner {
         Member e = iMemberService.findMember(1L);
         publicationService.addPub(new Publication("type1", new Date(), "lien1", "source1.pdf"));
         publicationService.addPub(new Publication("type2", new Date(), "lien2", "source1.pdf"));
+        Publication pub= new Publication("type3", new Date(), "lien2", "source1.pdf");
+        List<Member> auth=new ArrayList<Member>();
+        auth.add(m2);
+        //pub.setAuteurs(auth);
+        publicationService.addPub(pub);
+
 
 
         //System.out.println("old Cin:"+e.getCin());

@@ -12,5 +12,5 @@ public interface EvenementRepository extends JpaRepository<Evenement,Long> {
     List<Evenement> findAllById(Long id);
     List<Evenement> findAll();
     List<Evenement> findAllByDateEVTBetween(Date startDate,Date endDate);
-    List<Evenement> findAllBySource(String source);
+    List<Evenement> findAllByLieu(String source);
 }
