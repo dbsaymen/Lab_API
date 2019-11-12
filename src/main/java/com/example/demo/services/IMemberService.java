@@ -5,6 +5,7 @@ import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IMemberService {
     //Crud sur les membres
@@ -23,4 +24,5 @@ public interface IMemberService {
     //recherche spécifique des enseignants
     public List<EnseignantChercheur> findByGrade(String grade);
     public List<EnseignantChercheur> findByEtablissement(String etablissement);
+    Member findById(Long id);
 }

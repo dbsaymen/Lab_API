@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberImpl implements IMemberService {
@@ -69,5 +70,10 @@ public class MemberImpl implements IMemberService {
     @Override
     public List<EnseignantChercheur> findByEtablissement(String etablissement) {
         return null;
+    }
+
+    @Override
+    public Member findById(Long id) {
+        return memberRepository.findDistinctById(id);
     }
 }
