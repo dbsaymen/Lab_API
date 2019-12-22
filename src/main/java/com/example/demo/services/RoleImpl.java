@@ -11,6 +11,11 @@ public class RoleImpl implements IRoleService {
     RoleRepository roleRepository;
 
     @Override
+    public Role findRolebyName(String name) {
+        return this.roleRepository.findRoleByRoleName(name);
+    }
+
+    @Override
     public Role addRole(Role role) {
         return this.roleRepository.save(role);
     }

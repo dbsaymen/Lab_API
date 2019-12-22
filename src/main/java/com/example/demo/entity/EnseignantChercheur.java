@@ -26,7 +26,6 @@ public class EnseignantChercheur extends Member implements Serializable{
     }
     public EnseignantChercheur() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public EnseignantChercheur(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo,
                                String email, String password) {

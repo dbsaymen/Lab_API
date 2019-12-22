@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,29 +25,48 @@ public class Member implements Serializable {
     private String password;
 
     //Relations
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private List<Role>roles;
 
-    @ManyToMany(mappedBy = "auteurs")
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private List<Publication>pubs;
 
-    @ManyToMany(mappedBy = "organisateurs")
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private List<Evenement> evts;
 
-    @ManyToMany(mappedBy = "developpeurs")
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private List<Outil> outils;
 
-   @ManyToOne
+   @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private Laboratoire laboratoire;
+
+    public void addRole(Role role){
+        if(this.roles==null)
+            this.roles=new ArrayList<Role>();
+        this.roles.add(role);
+    }
+    public void addEvenment(Evenement evenement){
+        if(this.evts==null)
+            this.evts=new ArrayList<Evenement>();
+        this.evts.add(evenement);
+    }
+    public void addPublication(Publication publication){
+        if(this.pubs==null)
+            this.pubs=new ArrayList<Publication>();
+        this.pubs.add(publication);
+    }
+    public void addOutil(Outil outil){
+        if(this.outils==null)
+            this.outils=new ArrayList<Outil>();
+        this.outils.add(outil);
+    }
 
     public Laboratoire getLaboratoire() {
         return laboratoire;
     }
-
     public void setLaboratoire(Laboratoire laboratoire) {
         this.laboratoire = laboratoire;
     }
-
     public List<Evenement> getEvts() {
         return evts;
     }
@@ -107,14 +127,12 @@ public class Member implements Serializable {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
-
     public String getPassword() {
         return password;
     }
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getCin() {
         return cin;
     }
@@ -129,7 +147,6 @@ public class Member implements Serializable {
     }
     public Member() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public Member(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo, String email,
                   String password) {

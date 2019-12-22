@@ -8,13 +8,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 @Entity
 public class Outil implements Serializable {
     @Id
@@ -25,7 +20,7 @@ public class Outil implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "outils",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> developpeurs;
 

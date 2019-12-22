@@ -15,4 +15,19 @@ public class OutilImpl implements IOutilService {
     public List<Outil> getOutilById(Long id) {
         return outilRepository.findAllById(id);
     }
+
+    @Override
+    public Outil addOutil(Outil outil) {
+        return this.outilRepository.save(outil);
+    }
+
+    @Override
+    public Outil updateOutil(Outil outil) {
+        return this.outilRepository.saveAndFlush(outil);
+    }
+
+    @Override
+    public void deleteOutil(Long id) {
+        this.outilRepository.deleteById(id);
+    }
 }

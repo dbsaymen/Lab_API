@@ -21,12 +21,12 @@ public class Publication implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type; //article de journal/ manifestation/chapitre de livre/livre/poster
+    private String type;
     @Temporal(TemporalType.DATE)
     private Date dateApparition;
     private String lien;
     private String sourcePdf;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "pubs",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> auteurs;
 
@@ -76,7 +76,6 @@ public class Publication implements Serializable {
     }
     public Publication() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public void addAuthor(Member member){
         this.auteurs.add(member);

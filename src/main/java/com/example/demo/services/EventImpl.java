@@ -31,4 +31,19 @@ public class EventImpl implements IEventService {
     public List<Evenement> findEvenementByDateBetween(Date startDate, Date endDate) {
         return evenementRepository.findAllByDateEVTBetween(startDate,endDate);
     }
+
+    @Override
+    public Evenement addEvenement(Evenement evenement) {
+        return this.evenementRepository.save(evenement);
+    }
+
+    @Override
+    public Evenement updateEvenement(Evenement evenement) {
+        return this.evenementRepository.saveAndFlush(evenement);
+    }
+
+    @Override
+    public void deleteEvenement(Long id) {
+        this.evenementRepository.deleteById(id);
+    }
 }

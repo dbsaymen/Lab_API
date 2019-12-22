@@ -7,13 +7,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 @Entity
 public class Evenement implements Serializable {
     @Id
@@ -25,7 +20,7 @@ public class Evenement implements Serializable {
     private Date dateEVT;
     private String lieu;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "evts",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> organisateurs;
 
@@ -61,7 +56,6 @@ public class Evenement implements Serializable {
     }
     public Evenement() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public Evenement(String nom, Date dateEVT, String lieu) {
         super();
