@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository("Outil")
 public interface OutilRepository extends JpaRepository<Outil,Long> {
-    List<Outil> findAllById(Long id);
+    Outil findAllById(Long id);
+    List<Outil> findAll();
 }

@@ -12,7 +12,7 @@ public class OutilImpl implements IOutilService {
     OutilRepository outilRepository;
 
     @Override
-    public List<Outil> getOutilById(Long id) {
+    public Outil getOutilById(Long id) {
         return outilRepository.findAllById(id);
     }
 
@@ -29,5 +29,10 @@ public class OutilImpl implements IOutilService {
     @Override
     public void deleteOutil(Long id) {
         this.outilRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Outil> findAll() {
+        return this.outilRepository.findAll();
     }
 }
