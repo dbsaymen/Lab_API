@@ -1,19 +1,10 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorColumn(name= "type_mbr", discriminatorType = DiscriminatorType.STRING,length = 3)
@@ -33,42 +24,51 @@ public class Member implements Serializable {
     private String password;
 
     //Relations
-    @ManyToMany
-    private Collection<Role>roles;
+    @ManyToMany(mappedBy = "members")
+    private List<Role>roles;
 
     @ManyToMany(mappedBy = "auteurs")
-    private Collection<Publication>pubs;
+    private List<Publication>pubs;
 
     @ManyToMany(mappedBy = "organisateurs")
-    private Collection<Evenement>evts;
+    private List<Evenement> evts;
 
     @ManyToMany(mappedBy = "developpeurs")
-    private Collection<Outil> outils;
+    private List<Outil> outils;
 
+   @ManyToOne
+    private Laboratoire laboratoire;
 
+    public Laboratoire getLaboratoire() {
+        return laboratoire;
+    }
 
-    public Collection<Evenement> getEvts() {
+    public void setLaboratoire(Laboratoire laboratoire) {
+        this.laboratoire = laboratoire;
+    }
+
+    public List<Evenement> getEvts() {
         return evts;
     }
-    public void setEvts(Collection<Evenement> evts) {
+    public void setEvts(List<Evenement> evts) {
         this.evts = evts;
     }
-    public Collection<Outil> getOutils() {
+    public List<Outil> getOutils() {
         return outils;
     }
-    public void setOutils(Collection<Outil> outils) {
+    public void setOutils(List<Outil> outils) {
         this.outils = outils;
     }
-    public Collection<Publication> getPubs() {
+    public List<Publication> getPubs() {
         return pubs;
     }
-    public void setPubs(Collection<Publication> pubs) {
+    public void setPubs(List<Publication> pubs) {
         this.pubs = pubs;
     }
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
     public Long getId() {

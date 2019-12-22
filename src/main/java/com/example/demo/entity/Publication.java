@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +27,8 @@ public class Publication implements Serializable {
     private String lien;
     private String sourcePdf;
     @ManyToMany(cascade = CascadeType.ALL)
-    private Collection<Member> auteurs;
+    @JsonIgnore
+    private List<Member> auteurs;
 
 
     public Long getId() {
@@ -58,7 +61,7 @@ public class Publication implements Serializable {
     public void setSourcePdf(String sourcePdf) {
         this.sourcePdf = sourcePdf;
     }
-    public Collection<Member> getAuteurs() {
+    public List<Member> getAuteurs() {
         return auteurs;
     }
     public void setAuteurs(List<Member> auteurs) {

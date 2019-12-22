@@ -1,8 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,12 +26,13 @@ public class Evenement implements Serializable {
     private String lieu;
 
     @ManyToMany
-    private Collection<Member> organisateurs;
+    @JsonIgnore
+    private List<Member> organisateurs;
 
-    public Collection<Member> getOrganisateurs() {
+    public List<Member> getOrganisateurs() {
         return organisateurs;
     }
-    public void setOrganisateurs(Collection<Member> organisateurs) {
+    public void setOrganisateurs(List<Member> organisateurs) {
         this.organisateurs = organisateurs;
     }
     public Long getId() {
