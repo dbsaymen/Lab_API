@@ -20,7 +20,7 @@ public class Outil implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany(mappedBy = "outils",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "outils",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> developpeurs;
 

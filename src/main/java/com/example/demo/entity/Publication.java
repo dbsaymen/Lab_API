@@ -26,7 +26,7 @@ public class Publication implements Serializable {
     private Date dateApparition;
     private String lien;
     private String sourcePdf;
-    @ManyToMany(mappedBy = "pubs",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "pubs",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> auteurs;
 

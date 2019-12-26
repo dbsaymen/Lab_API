@@ -16,7 +16,7 @@ public class Laboratoire implements Serializable {
     private String code;
     private String etablissement;
     private String universite;
-    @OneToMany(mappedBy = "laboratoire",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "laboratoire",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> members;
 

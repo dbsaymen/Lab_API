@@ -4,6 +4,7 @@ import com.example.demo.dao.MemberRepository;
 import com.example.demo.entity.EnseignantChercheur;
 import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
+import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class MemberImpl implements IMemberService {
     @Autowired
     MemberRepository memberRepository;
-
+    @Autowired
+    Utils utils;
 
     @Override
     public Member addMember(Member m) {
+        m.setPublicID(utils.generateUserID(30));
         return memberRepository.save(m);
     }
 

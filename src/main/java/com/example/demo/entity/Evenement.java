@@ -20,7 +20,7 @@ public class Evenement implements Serializable {
     private Date dateEVT;
     private String lieu;
 
-    @ManyToMany(mappedBy = "evts",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "evts",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     @JsonIgnore
     private List<Member> organisateurs;
 
