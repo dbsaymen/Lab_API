@@ -17,6 +17,7 @@ public class Member implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String publicID;
     @Column(nullable = false, length = 50, unique = true)
@@ -51,7 +52,7 @@ public class Member implements Serializable {
     @ManyToMany(targetEntity = Outil.class, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     private List<Outil> outils;
 
-    @ManyToOne(targetEntity = Laboratoire.class, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(targetEntity = Laboratoire.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     private Laboratoire laboratoire;
 
     public void addRole(Role role) {

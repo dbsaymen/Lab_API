@@ -9,9 +9,9 @@ import java.util.Random;
 public class Utils {
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    public String generateUserID(int length) {
-        return generateRandomString(length);
+    private final int LENGTH=30;
+    public String generateUserID() {
+        return generateRandomString(LENGTH);
     }
 
     private String generateRandomString(int length) {

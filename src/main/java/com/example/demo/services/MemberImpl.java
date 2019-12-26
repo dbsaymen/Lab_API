@@ -6,6 +6,9 @@ import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
 import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +20,27 @@ public class MemberImpl implements IMemberService {
     MemberRepository memberRepository;
     @Autowired
     Utils utils;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Member addMember(Member m) {
-        m.setPublicID(utils.generateUserID(30));
+        String publicID;
+        do {
+            publicID = utils.generateUserID();
+        } while (memberRepository.findDistinctByPublicID(publicID) != null);
+        m.setPublicID(publicID);
+        if(m.getPassword()!=null)
+            m.setPassword(this.bCryptPasswordEncoder.encode(m.getPassword()));
+        else
+            return null;
         return memberRepository.save(m);
     }
 
     @Override
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+    public void deleteMember(String id) {
+        Member m =memberRepository.findDistinctByPublicID(id);
+        memberRepository.deleteById(m.getId());
     }
 
     @Override
@@ -35,8 +49,13 @@ public class MemberImpl implements IMemberService {
     }
 
     @Override
+    public Member findDistinctByPublicID(String publicID) {
+        return memberRepository.findDistinctByPublicID(publicID);
+    }
+
+    @Override
     public Member findMember(Long id) {
-        Member m= (Member)memberRepository.findById(id).get();
+        Member m = (Member) memberRepository.findById(id).get();
         return m;
     }
 
@@ -78,5 +97,10 @@ public class MemberImpl implements IMemberService {
     @Override
     public Member findById(Long id) {
         return memberRepository.findDistinctById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
     }
 }
