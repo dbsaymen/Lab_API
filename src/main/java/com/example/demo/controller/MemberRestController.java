@@ -40,9 +40,10 @@ public class MemberRestController {
     }
 
     @PostMapping(value = "/etudiant")
-    public MemberReturn addEtudiant(@RequestBody Etudiant e) {
+    public MemberReturn addEtudiant(@RequestBody Etudiant e) throws Exception {
         MemberReturn mr = new EtudiantReturn();
         Member m=memberService.addMember(e);
+        if(m.getId()==null) return null;
         BeanUtils.copyProperties(m, mr);
         return mr;
     }
@@ -62,9 +63,11 @@ public class MemberRestController {
     }
 
     @PostMapping(value = "/enseignant")
-    public MemberReturn addEnseignant(@RequestBody EnseignantChercheur e) {
+    public MemberReturn addEnseignant(@RequestBody EnseignantChercheur e) throws Exception {
         MemberReturn mr = new EnseignantChercheurReturn();
-        BeanUtils.copyProperties(memberService.addMember(e), mr);
+        Member m=memberService.addMember(e);
+        if(m.getId()==null) return null;
+        BeanUtils.copyProperties(m, mr);
         return mr;
     }
 

@@ -6,11 +6,13 @@ import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
 import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,7 @@ public class MemberImpl implements IMemberService {
     @Override
     public Member addMember(Member m) {
         String publicID;
+        Member newMember;
         do {
             publicID = utils.generateUserID();
         } while (memberRepository.findDistinctByPublicID(publicID) != null);
@@ -34,7 +37,14 @@ public class MemberImpl implements IMemberService {
             m.setPassword(this.bCryptPasswordEncoder.encode(m.getPassword()));
         else
             return null;
-        return memberRepository.save(m);
+        try{
+            newMember=memberRepository.save(m);
+            return newMember;
+        }catch (Exception e){
+
+        }
+        return (new Member());
+
     }
 
     @Override
@@ -100,7 +110,9 @@ public class MemberImpl implements IMemberService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member= memberRepository.findByEmail(email);
+        if (member==null)throw new UsernameNotFoundException(email);
+        return new User(member.getEmail(),member.getPassword(),new ArrayList<>());
     }
 }
