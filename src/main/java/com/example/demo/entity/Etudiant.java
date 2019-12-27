@@ -13,7 +13,7 @@ public class Etudiant extends Member implements Serializable{
     private String sujet;
     private String diplome;
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @ManyToOne(fetch=FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private EnseignantChercheur encadrant;
 
     public EnseignantChercheur getEncadrant() {
@@ -57,6 +57,15 @@ public class Etudiant extends Member implements Serializable{
     }
 
 
+    @Override
+    public String toString() {
+        return "Etudiant";
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.toString().equals(this.toString())) return true;
+        return false;
+    }
 }
 

@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.EnseignantChercheur;
-import com.example.demo.entity.Etudiant;
-import com.example.demo.entity.Member;
+import com.example.demo.entity.*;
 import com.example.demo.services.IMemberService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,42 +17,64 @@ public class MemberRestController {
     IMemberService memberService;
 
     @GetMapping(value = "/")
-    public List<Member> findMembers() {
-        return memberService.findAll();
+    public List<MemberReturn> findMembers() {
+        List<Member> members = memberService.findAll();
+        List<MemberReturn> memberReturns = new ArrayList<>();
+        for (Member m : members) {
+            MemberReturn mr;
+            if (m.toString().equals("Etudiant"))
+                mr = new EtudiantReturn();
+            else
+                mr = new EnseignantChercheurReturn();
+            BeanUtils.copyProperties(m, mr);
+            memberReturns.add(mr);
+        }
+        return memberReturns;
     }
 
     @GetMapping(value = "/{id}")
-    public Member findMembersById(@PathVariable("id") String id) {
-        return memberService.findDistinctByPublicID(id);
+    public MemberReturn findMembersById(@PathVariable("id") String id) {
+        MemberReturn mr = new MemberReturn();
+        BeanUtils.copyProperties( memberService.findDistinctByPublicID(id),mr);
+        return mr;
     }
 
     @PostMapping(value = "/etudiant")
-    public Member addEtudiant(@RequestBody Etudiant e) {
-        return memberService.addMember(e);
+    public MemberReturn addEtudiant(@RequestBody Etudiant e) {
+        MemberReturn mr = new EtudiantReturn();
+        Member m=memberService.addMember(e);
+        BeanUtils.copyProperties(m, mr);
+        return mr;
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deleteEtudiant(@PathVariable("id") String id) {
-        memberService.deleteMember(id);
+    @DeleteMapping(value = "/{publicId}")
+    public void deleteEtudiant(@PathVariable("id") String publicId) {
+        memberService.deleteMember(publicId);
     }
 
-    @PutMapping(value = "/etudiant/{id}")
-    public Member updateEtudiant(@PathVariable("id") String pubId, @RequestBody Etudiant e) {
-        Long id = memberService.findDistinctByPublicID(pubId).getId();
+    @PutMapping(value = "/etudiant/{publicId}")
+    public MemberReturn updateEtudiant(@PathVariable("publicId") String publicId, @RequestBody Etudiant e) {
+        Long id = memberService.findDistinctByPublicID(publicId).getId();
         e.setId(id);
-        return memberService.updateMember(e);
+        MemberReturn mr = new EtudiantReturn();
+        BeanUtils.copyProperties(memberService.updateMember(e), mr);
+        return mr;
     }
 
     @PostMapping(value = "/enseignant")
-    public Member addEnseignant(@RequestBody EnseignantChercheur e) {
-        return memberService.addMember(e);
+    public MemberReturn addEnseignant(@RequestBody EnseignantChercheur e) {
+        MemberReturn mr = new EnseignantChercheurReturn();
+        BeanUtils.copyProperties(memberService.addMember(e), mr);
+        return mr;
     }
 
     @PutMapping(value = "/enseignant/{id}")
-    public Member updateEnseignant(@PathVariable("id") String pubId, @RequestBody EnseignantChercheur e) {
+    public MemberReturn updateEnseignant(@PathVariable("id") String pubId, @RequestBody EnseignantChercheur e) {
         Long id = memberService.findDistinctByPublicID(pubId).getId();
         e.setId(id);
-        return memberService.updateMember(e);
+        MemberReturn mr = new EnseignantChercheurReturn();
+        BeanUtils.copyProperties(memberService.updateMember(e), mr);
+        return mr;
     }
 
 }

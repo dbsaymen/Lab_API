@@ -18,6 +18,7 @@ public class Member implements Serializable {
     @Column(nullable = false)
     private Long id;
 
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String publicID;
     @Column(nullable = false, length = 50, unique = true)
@@ -34,7 +35,6 @@ public class Member implements Serializable {
     @Column(nullable = false, length = 150, unique = true)
     private String email;
     @Column(nullable = false)
-    @JsonIgnore
     private String password;
 
 
@@ -214,6 +214,16 @@ public class Member implements Serializable {
         this.photo = photo;
         this.email = email;
         this.password = password;
+    }
+    @Override
+    public String toString() {
+        return "Member";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.toString().equals(this.toString())) return true;
+        return false;
     }
 
 
