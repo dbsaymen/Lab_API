@@ -36,10 +36,11 @@ public class Member implements Serializable {
     private String email;
     @Column(nullable = false)
     private String password;
+    private boolean activated = true;
 
 
     //Relations
-    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(targetEntity = Role.class,fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonIgnore
     private List<Role> roles;
 
@@ -60,6 +61,7 @@ public class Member implements Serializable {
             this.roles = new ArrayList<Role>();
         this.roles.add(role);
     }
+
 
     public String getPublicID() {
         return publicID;
@@ -85,6 +87,14 @@ public class Member implements Serializable {
         if (this.outils == null)
             this.outils = new ArrayList<Outil>();
         this.outils.add(outil);
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean status) {
+        this.activated = status;
     }
 
     public Laboratoire getLaboratoire() {
@@ -215,6 +225,7 @@ public class Member implements Serializable {
         this.email = email;
         this.password = password;
     }
+
     @Override
     public String toString() {
         return "Member";
@@ -222,7 +233,13 @@ public class Member implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj.toString().equals(this.toString())) return true;
+        if (obj.toString().equals(this.toString())) return true;
+        return false;
+    }
+    public boolean hasRole(String role){
+        for (Role r:roles)
+            if(r.getRoleName().equals(role))
+                return true;
         return false;
     }
 

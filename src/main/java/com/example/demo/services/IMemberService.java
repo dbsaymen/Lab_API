@@ -3,11 +3,10 @@ package com.example.demo.services;
 import com.example.demo.entity.EnseignantChercheur;
 import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface IMemberService extends UserDetailsService {
+public interface IMemberService  {
     public Member addMember(Member m);
 
     public void deleteMember(String id);

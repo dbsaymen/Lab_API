@@ -16,6 +16,7 @@ public class MemberReturn {
     private List<Evenement> evts;
     private List<Outil> outils;
     private Laboratoire laboratoire;
+    private List<Role> roles;
 
     public MemberReturn() {
     }
@@ -29,6 +30,14 @@ public class MemberReturn {
         this.cv = cv;
         this.photo = photo;
         this.email = email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPublicID() {

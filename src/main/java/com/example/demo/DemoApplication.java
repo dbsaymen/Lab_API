@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 
@@ -27,7 +28,7 @@ public class DemoApplication implements CommandLineRunner {
     @Autowired
     IEventService iEventService;
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder bCryptPasswordEncoder() {
         return (new BCryptPasswordEncoder());
     }
 
@@ -38,7 +39,7 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Etudiant m = new Etudiant("65464646", "test1", "test", new Date(), "cv1.pdf", null, "test1@mail.com", "password");
+        Etudiant m = new Etudiant("65464646", "test1", "test", new Date(), "cv1.pdf", null, "user@mail.com", "user");
         Etudiant m1 = new Etudiant("123456", "Chaari", "Dorra", new Date(), "cv1.pdf", null, "test2@mail.com", "password");
         Etudiant m2 = new Etudiant("321654", "Ghattasi", "Aycha", new Date(), "cv1.pdf", null, "test3@mail.com", "password");
         EnseignantChercheur m3 = new EnseignantChercheur("464516", "Ben salem", "Aymen", new Date(), "cv1.pdf", null, "test@mail.com", "password");
@@ -53,7 +54,8 @@ public class DemoApplication implements CommandLineRunner {
 
         Evenement ev1 = new Evenement("IProtect", new Date(), "sfax");
 
-        Role r1 = new Role("admin");
+        Role r1 = new Role("ADMIN");
+        Role r2 = new Role("USER");
 
         iMemberService.addMember(m);
         iMemberService.addMember(m1);
@@ -73,10 +75,14 @@ public class DemoApplication implements CommandLineRunner {
         m.addPublication(pub);
         m.addOutil(o1);
         m.addRole(r1);
+        m1.addRole(r2);
+        m2.addRole(r2);
         m.setLaboratoire(lab);
         m.addEvenment(ev1);
 
         iMemberService.updateMember(m);
+        iMemberService.updateMember(m1);
+        iMemberService.updateMember(m2);
 
     }
 

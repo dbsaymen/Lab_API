@@ -6,13 +6,11 @@ import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
 import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberImpl implements IMemberService {
@@ -21,7 +19,7 @@ public class MemberImpl implements IMemberService {
     @Autowired
     Utils utils;
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Member addMember(Member m) {
@@ -71,7 +69,7 @@ public class MemberImpl implements IMemberService {
 
     @Override
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email);
+        return memberRepository.findDistinctByEmail(email);
     }
 
     @Override
@@ -99,8 +97,5 @@ public class MemberImpl implements IMemberService {
         return memberRepository.findDistinctById(id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
-    }
+
 }
