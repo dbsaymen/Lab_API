@@ -1,7 +1,8 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.entity.Role;
+import com.example.demo.services.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

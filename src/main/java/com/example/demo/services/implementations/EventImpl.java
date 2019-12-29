@@ -1,7 +1,8 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import com.example.demo.dao.EvenementRepository;
 import com.example.demo.entity.Evenement;
+import com.example.demo.services.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
