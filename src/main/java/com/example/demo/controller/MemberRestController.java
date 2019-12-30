@@ -37,16 +37,15 @@ public class MemberRestController {
 
     @GetMapping(value = "/{id}")
     public MemberReturn findMembersById(@PathVariable("id") String publicId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-                MemberReturn mr = new MemberReturn();
-                BeanUtils.copyProperties(memberService.findDistinctByPublicID(publicId), mr);
-                return mr;
-            }
+        Member member=memberService.findDistinctByPublicID(publicId);
+        if(member !=null){
+            MemberReturn mr = new MemberReturn();
+            BeanUtils.copyProperties(member, mr);
+            return mr;
+        }else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
         }
-        return null;
+
     }
 
     @GetMapping(value = "/login")
