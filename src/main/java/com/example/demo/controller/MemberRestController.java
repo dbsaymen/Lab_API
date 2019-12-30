@@ -37,12 +37,12 @@ public class MemberRestController {
 
     @GetMapping(value = "/{id}")
     public MemberReturn findMembersById(@PathVariable("id") String publicId) {
-        Member member=memberService.findDistinctByPublicID(publicId);
-        if(member !=null){
+        Member member = memberService.findDistinctByPublicID(publicId);
+        if (member != null) {
             MemberReturn mr = new MemberReturn();
             BeanUtils.copyProperties(member, mr);
             return mr;
-        }else {
+        } else {
             throw new org.springframework.security.access.AccessDeniedException("401 returned");
         }
 
@@ -50,16 +50,20 @@ public class MemberRestController {
 
     @GetMapping(value = "/login")
     public MemberReturn Login(@RequestParam("email") String email) {
-        if(email!=null){
-            Member member=memberService.findByEmail(email);
-            if(member !=null){
-                MemberReturn memberReturn= new MemberReturn();
+        if (email != null) {
+            Member member = memberService.findByEmail(email);
+            MemberReturn memberReturn;
+            if (member != null) {
+                if (member.toString().equals("Etudiant"))
+                    memberReturn = new EtudiantReturn();
+                else
+                    memberReturn = new EnseignantChercheurReturn();
                 BeanUtils.copyProperties(member, memberReturn);
                 return memberReturn;
-            }else {
+            } else {
                 throw new org.springframework.security.access.AccessDeniedException("401 returned");
             }
-        }else {
+        } else {
             throw new org.springframework.security.access.AccessDeniedException("401 returned");
         }
 
