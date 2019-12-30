@@ -49,7 +49,7 @@ public class MemberRestController {
         return null;
     }
 
-    @PostMapping(value = "/login")
+    @GetMapping(value = "/login")
     public MemberReturn Login(@RequestParam("email") String email) {
         if(email!=null){
             Member member=memberService.findByEmail(email);
