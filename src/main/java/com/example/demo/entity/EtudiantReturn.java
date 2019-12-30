@@ -10,6 +10,7 @@ public class EtudiantReturn extends MemberReturn implements Serializable {
     private Date dateInscription;
     private String sujet;
     private String diplome;
+    private String type="etudiant";
     private EnseignantChercheurReturn encadrant;
 
 
@@ -21,6 +22,14 @@ public class EtudiantReturn extends MemberReturn implements Serializable {
         this.sujet = sujet;
         this.diplome = diplome;
         this.encadrant = encadrant;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setEncadrant(EnseignantChercheurReturn encadrant) {

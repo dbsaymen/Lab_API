@@ -66,7 +66,6 @@ public class MemberRestController {
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN"))
                 memberService.deleteMember(publicId);
         }
-
     }
 
     @PutMapping(value = "/etudiant/{publicId}")
@@ -98,7 +97,6 @@ public class MemberRestController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-
                 Long id = memberService.findDistinctByPublicID(publicId).getId();
                 e.setId(id);
                 MemberReturn mr = new EnseignantChercheurReturn();
