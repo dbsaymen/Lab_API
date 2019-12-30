@@ -49,6 +49,23 @@ public class MemberRestController {
         return null;
     }
 
+    @PostMapping(value = "/login")
+    public MemberReturn Login(@RequestParam("email") String email) {
+        if(email!=null){
+            Member member=memberService.findByEmail(email);
+            if(member !=null){
+                MemberReturn memberReturn= new MemberReturn();
+                BeanUtils.copyProperties(member, memberReturn);
+                return memberReturn;
+            }else {
+                throw new org.springframework.security.access.AccessDeniedException("401 returned");
+            }
+        }else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
+        }
+
+    }
+
 
     @PostMapping(value = "/etudiant")
     public MemberReturn addEtudiant(@RequestBody Etudiant e) {
