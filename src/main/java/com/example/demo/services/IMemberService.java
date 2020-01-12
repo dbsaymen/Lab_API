@@ -5,7 +5,6 @@ import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IMemberService {
     //Crud sur les membres
