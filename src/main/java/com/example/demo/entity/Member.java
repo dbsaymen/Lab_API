@@ -1,109 +1,186 @@
 package com.example.demo.entity;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.*;
 
 @Entity
-@DiscriminatorColumn(name= "type_mbr", discriminatorType = DiscriminatorType.STRING,length = 3)
+@DiscriminatorColumn(name = "type_mbr", discriminatorType = DiscriminatorType.STRING, length = 3)
 public class Member implements Serializable {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+
+    @JsonIgnore
+    @Column(nullable = false, unique = true)
+    private String publicID;
+    @Column(nullable = false, length = 50, unique = true)
     private String cin;
+    @Column(nullable = false, length = 50)
     private String nom;
+    @Column(nullable = false, length = 50)
     private String prenom;
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
     private String cv;
     @Lob
     private byte[] photo;
+    @Column(nullable = false, length = 150, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
+    private boolean activated = true;
+
 
     //Relations
-    @ManyToMany
-    private Collection<Role>roles;
+    @ManyToMany(targetEntity = Role.class,fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
+    private List<Role> roles;
 
-    @ManyToMany(mappedBy = "auteurs")
-    private Collection<Publication>pubs;
+    @ManyToMany(targetEntity = Publication.class, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Publication> pubs;
 
-    @ManyToMany(mappedBy = "organisateurs")
-    private Collection<Evenement>evts;
+    @ManyToMany(targetEntity = Evenement.class, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Evenement> evts;
 
-    @ManyToMany(mappedBy = "developpeurs")
-    private Collection<Outil> outils;
+    @ManyToMany(targetEntity = Outil.class, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Outil> outils;
+
+    @ManyToOne(targetEntity = Laboratoire.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    private Laboratoire laboratoire;
+
+    public void addRole(Role role) {
+        if (this.roles == null)
+            this.roles = new ArrayList<Role>();
+        this.roles.add(role);
+    }
 
 
+    public String getPublicID() {
+        return publicID;
+    }
 
-    public Collection<Evenement> getEvts() {
+    public void setPublicID(String publicID) {
+        this.publicID = publicID;
+    }
+
+    public void addEvenment(Evenement evenement) {
+        if (this.evts == null)
+            this.evts = new ArrayList<Evenement>();
+        this.evts.add(evenement);
+    }
+
+    public void addPublication(Publication publication) {
+        if (this.pubs == null)
+            this.pubs = new ArrayList<Publication>();
+        this.pubs.add(publication);
+    }
+
+    public void addOutil(Outil outil) {
+        if (this.outils == null)
+            this.outils = new ArrayList<Outil>();
+        this.outils.add(outil);
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean status) {
+        this.activated = status;
+    }
+
+    public Laboratoire getLaboratoire() {
+        return laboratoire;
+    }
+
+    public void setLaboratoire(Laboratoire laboratoire) {
+        this.laboratoire = laboratoire;
+    }
+
+    public List<Evenement> getEvts() {
         return evts;
     }
-    public void setEvts(Collection<Evenement> evts) {
+
+    public void setEvts(List<Evenement> evts) {
         this.evts = evts;
     }
-    public Collection<Outil> getOutils() {
+
+    public List<Outil> getOutils() {
         return outils;
     }
-    public void setOutils(Collection<Outil> outils) {
+
+    public void setOutils(List<Outil> outils) {
         this.outils = outils;
     }
-    public Collection<Publication> getPubs() {
+
+    public List<Publication> getPubs() {
         return pubs;
     }
-    public void setPubs(Collection<Publication> pubs) {
+
+    public void setPubs(List<Publication> pubs) {
         this.pubs = pubs;
     }
-    public Collection<Role> getRoles() {
+
+    public List<Role> getRoles() {
         return roles;
     }
-    public void setRoles(Collection<Role> roles) {
+
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getNom() {
         return nom;
     }
+
     public void setNom(String nom) {
         this.nom = nom;
     }
+
     public String getPrenom() {
         return prenom;
     }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
+
     public Date getDateNaissance() {
         return dateNaissance;
     }
+
     public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
+
     public String getCv() {
         return cv;
     }
+
     public void setCv(String cv) {
         this.cv = cv;
     }
+
     public byte[] getPhoto() {
         return photo;
     }
+
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
@@ -111,6 +188,7 @@ public class Member implements Serializable {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -118,21 +196,25 @@ public class Member implements Serializable {
     public String getCin() {
         return cin;
     }
+
     public void setCin(String cin) {
         this.cin = cin;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
+
     public Member() {
         super();
-        // TODO Auto-generated constructor stub
     }
-    public Member(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo, String email,
-                  String password) {
+
+    public Member(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo, String email, String password) {
         super();
         this.cin = cin;
         this.nom = nom;
@@ -144,7 +226,22 @@ public class Member implements Serializable {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "Member";
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.toString().equals(this.toString())) return true;
+        return false;
+    }
+    public boolean hasRole(String role){
+        for (Role r:roles)
+            if(r.getRoleName().equals(role))
+                return true;
+        return false;
+    }
 
 
 }

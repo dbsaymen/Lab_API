@@ -8,7 +8,8 @@ import java.util.List;
 @Repository("member")
 public interface MemberRepository extends JpaRepository<Member,Long> {
     Member findByCin(String cin);
+    Member findDistinctByPublicID(String publicID);
     List<Member> findByNomStartingWith(String caractere);
-    Member findByEmail(String email);
+    Member findDistinctByEmail(String email);
     Member findDistinctById(Long id);
 }

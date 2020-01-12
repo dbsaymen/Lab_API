@@ -1,16 +1,14 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 @Entity
 public class Evenement implements Serializable {
     @Id
@@ -22,13 +20,14 @@ public class Evenement implements Serializable {
     private Date dateEVT;
     private String lieu;
 
-    @ManyToMany
-    private Collection<Member> organisateurs;
+    @ManyToMany(mappedBy = "evts",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @JsonIgnore
+    private List<Member> organisateurs;
 
-    public Collection<Member> getOrganisateurs() {
+    public List<Member> getOrganisateurs() {
         return organisateurs;
     }
-    public void setOrganisateurs(Collection<Member> organisateurs) {
+    public void setOrganisateurs(List<Member> organisateurs) {
         this.organisateurs = organisateurs;
     }
     public Long getId() {
@@ -57,7 +56,6 @@ public class Evenement implements Serializable {
     }
     public Evenement() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public Evenement(String nom, Date dateEVT, String lieu) {
         super();

@@ -1,17 +1,15 @@
 package com.example.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 @Entity
 public class Outil implements Serializable {
     @Id
@@ -22,13 +20,14 @@ public class Outil implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @ManyToMany
-    private Collection<Member> developpeurs;
+    @ManyToMany(mappedBy = "outils",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @JsonIgnore
+    private List<Member> developpeurs;
 
-    public Collection<Member> getDeveloppeurs() {
+    public List<Member> getDeveloppeurs() {
         return developpeurs;
     }
-    public void setDeveloppeurs(Collection<Member> developpeurs) {
+    public void setDeveloppeurs(List<Member> developpeurs) {
         this.developpeurs = developpeurs;
     }
     public Long getId() {
@@ -63,6 +62,5 @@ public class Outil implements Serializable {
     }
     public Outil() {
         super();
-        // TODO Auto-generated constructor stub
     }
 }

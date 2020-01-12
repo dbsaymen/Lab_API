@@ -1,29 +1,45 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import com.example.demo.dao.MemberRepository;
 import com.example.demo.entity.EnseignantChercheur;
 import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
+import com.example.demo.services.IMemberService;
+import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberImpl implements IMemberService {
     @Autowired
     MemberRepository memberRepository;
-
+    @Autowired
+    Utils utils;
+    @Autowired
+    PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Member addMember(Member m) {
+        String publicID;
+        do {
+            publicID = utils.generateUserID();
+        } while (memberRepository.findDistinctByPublicID(publicID) != null);
+        m.setPublicID(publicID);
+        if(m.getPassword()!=null)
+            m.setPassword(this.bCryptPasswordEncoder.encode(m.getPassword()));
+        else
+            return null;
         return memberRepository.save(m);
     }
 
     @Override
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+    public void deleteMember(String id) {
+        Member m =memberRepository.findDistinctByPublicID(id);
+        memberRepository.deleteById(m.getId());
     }
 
     @Override
@@ -32,8 +48,13 @@ public class MemberImpl implements IMemberService {
     }
 
     @Override
+    public Member findDistinctByPublicID(String publicID) {
+        return memberRepository.findDistinctByPublicID(publicID);
+    }
+
+    @Override
     public Member findMember(Long id) {
-        Member m= (Member)memberRepository.findById(id).get();
+        Member m = (Member) memberRepository.findById(id).get();
         return m;
     }
 
@@ -49,7 +70,7 @@ public class MemberImpl implements IMemberService {
 
     @Override
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email);
+        return memberRepository.findDistinctByEmail(email);
     }
 
     @Override
@@ -76,4 +97,6 @@ public class MemberImpl implements IMemberService {
     public Member findById(Long id) {
         return memberRepository.findDistinctById(id);
     }
+
+
 }

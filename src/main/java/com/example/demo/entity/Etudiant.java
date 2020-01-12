@@ -3,12 +3,7 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("etd")
@@ -18,9 +13,7 @@ public class Etudiant extends Member implements Serializable{
     private String sujet;
     private String diplome;
 
-    //relation : a un encadrant par défaut est eager
-    //@ManyToOne
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
     private EnseignantChercheur encadrant;
 
     public EnseignantChercheur getEncadrant() {
@@ -50,12 +43,10 @@ public class Etudiant extends Member implements Serializable{
     }
     public Etudiant() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public Etudiant(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo,
                     String email, String password) {
         super(cin, nom, prenom, dateNaissance, cv, photo, email, password);
-        // TODO Auto-generated constructor stub
     }
     public Etudiant(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo, String email,
                     String password, Date dateInscription, String sujet, String diplome) {
@@ -66,6 +57,15 @@ public class Etudiant extends Member implements Serializable{
     }
 
 
+    @Override
+    public String toString() {
+        return "Etudiant";
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.toString().equals(this.toString())) return true;
+        return false;
+    }
 }
 

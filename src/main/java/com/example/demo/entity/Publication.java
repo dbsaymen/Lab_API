@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,13 +21,14 @@ public class Publication implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type; //article de journal/ manifestation/chapitre de livre/livre/poster
+    private String type;
     @Temporal(TemporalType.DATE)
     private Date dateApparition;
     private String lien;
     private String sourcePdf;
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Collection<Member> auteurs;
+    @ManyToMany(mappedBy = "pubs",targetEntity = Member.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @JsonIgnore
+    private List<Member> auteurs;
 
 
     public Long getId() {
@@ -58,7 +61,7 @@ public class Publication implements Serializable {
     public void setSourcePdf(String sourcePdf) {
         this.sourcePdf = sourcePdf;
     }
-    public Collection<Member> getAuteurs() {
+    public List<Member> getAuteurs() {
         return auteurs;
     }
     public void setAuteurs(List<Member> auteurs) {
@@ -73,7 +76,6 @@ public class Publication implements Serializable {
     }
     public Publication() {
         super();
-        // TODO Auto-generated constructor stub
     }
     public void addAuthor(Member member){
         this.auteurs.add(member);

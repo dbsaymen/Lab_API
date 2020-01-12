@@ -1,55 +1,130 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.EnseignantChercheur;
-import com.example.demo.entity.Etudiant;
-import com.example.demo.entity.Member;
+import com.example.demo.entity.*;
 import com.example.demo.services.IMemberService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/members")
 public class MemberRestController {
     @Autowired
     IMemberService memberService;
 
-    @GetMapping(value="/members")
-    public List<Member> findMembers(){
-        return memberService.findAll();
+    @GetMapping(value = "/")
+    public List<MemberReturn> findMembers() {
+        List<Member> members = memberService.findAll();
+        List<MemberReturn> memberReturns = new ArrayList<>();
+        for (Member m : members) {
+            MemberReturn mr;
+            if (m.toString().equals("Etudiant"))
+                mr = new EtudiantReturn();
+            else
+                mr = new EnseignantChercheurReturn();
+            BeanUtils.copyProperties(m, mr);
+            memberReturns.add(mr);
+        }
+        return memberReturns;
     }
-    @GetMapping(value="/members/{id}")
-    public Member findMembersById(@PathVariable("id") Long id){
-        return memberService.findById(id);
+
+    @GetMapping(value = "/{id}")
+    public MemberReturn findMembersById(@PathVariable("id") String publicId) {
+        Member member = memberService.findDistinctByPublicID(publicId);
+        if (member != null) {
+            MemberReturn mr = new MemberReturn();
+            BeanUtils.copyProperties(member, mr);
+            return mr;
+        } else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
+        }
+
     }
-    @PostMapping(value = "/member/etudiant")
-    public Member addEtudiant(@RequestBody Etudiant e){
-        return memberService.addMember(e);
-    }
-    @DeleteMapping(value = "/member/etudiant/{id}")
-    public void deleteEtudiant (@PathVariable("id") Long id){
-        memberService.deleteMember(id);
-    }
-    @PutMapping(value="member/etudiant/{id}")
-    public Member updateEtudiant(@PathVariable("id")Long id, @RequestBody Etudiant e){
-        e.setId(id);
-        return memberService.updateMember(e) ;
+
+    @GetMapping(value = "/login")
+    public MemberReturn Login(@RequestParam("email") String email) {
+        if (email != null) {
+            Member member = memberService.findByEmail(email);
+            MemberReturn memberReturn;
+            if (member != null) {
+                if (member.toString().equals("Etudiant"))
+                    memberReturn = new EtudiantReturn();
+                else
+                    memberReturn = new EnseignantChercheurReturn();
+                BeanUtils.copyProperties(member, memberReturn);
+                return memberReturn;
+            } else {
+                throw new org.springframework.security.access.AccessDeniedException("401 returned");
+            }
+        } else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
+        }
+
     }
 
 
-    @PostMapping(value = "/member/enseignant")
-    public Member addEnseignant(@RequestBody EnseignantChercheur e){
-        return memberService.addMember(e);
+    @PostMapping(value = "/etudiant")
+    public MemberReturn addEtudiant(@RequestBody Etudiant e) {
+        MemberReturn mr = new EtudiantReturn();
+        Member m = memberService.addMember(e);
+        BeanUtils.copyProperties(m, mr);
+        return mr;
     }
-    @DeleteMapping(value = "/member/enseignant/{id}")
-    public void deleteEnseignant (@PathVariable("id") Long id){
-        memberService.deleteMember(id);
+
+    @DeleteMapping(value = "/{publicId}")
+    public void deleteEtudiant(@PathVariable("publicId") String publicId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN"))
+                memberService.deleteMember(publicId);
+        }
     }
-    @PutMapping(value="member/enseignant/{id}")
-    public Member updateEnseignant(@PathVariable("id")Long id, @RequestBody EnseignantChercheur e){
-        e.setId(id);
-        return memberService.updateMember(e) ;
+
+    @PutMapping(value = "/etudiant/{publicId}")
+    public MemberReturn updateEtudiant(@PathVariable("publicId") String publicId, @RequestBody Etudiant e) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
+                Long id = memberService.findDistinctByPublicID(publicId).getId();
+                e.setId(id);
+                MemberReturn mr = new EtudiantReturn();
+                BeanUtils.copyProperties(memberService.updateMember(e), mr);
+                return mr;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping(value = "/enseignant")
+    public MemberReturn addEnseignant(@RequestBody EnseignantChercheur e) {
+        MemberReturn mr = new EnseignantChercheurReturn();
+        BeanUtils.copyProperties(memberService.addMember(e), mr);
+        return mr;
+    }
+
+    @PutMapping(value = "/enseignant/{id}")
+    public MemberReturn updateEnseignant(@PathVariable("id") String publicId, @RequestBody EnseignantChercheur e) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
+                Long id = memberService.findDistinctByPublicID(publicId).getId();
+                e.setId(id);
+                MemberReturn mr = new EnseignantChercheurReturn();
+                BeanUtils.copyProperties(memberService.updateMember(e), mr);
+                return mr;
+            }
+        }
+        return null;
     }
 
 }

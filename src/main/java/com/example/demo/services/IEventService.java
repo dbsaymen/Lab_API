@@ -10,4 +10,7 @@ public interface IEventService {
     List<Evenement> findAll();
     List<Evenement> findEvenementByLieu(String source);
     List<Evenement> findEvenementByDateBetween(Date startDate, Date endDate);
+    Evenement addEvenement(Evenement evenement);
+    Evenement updateEvenement(Evenement evenement);
+    void deleteEvenement(Long id);
 }
