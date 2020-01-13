@@ -39,10 +39,10 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Etudiant m = new Etudiant("65464646", "test1", "test", new Date(), "cv1.pdf", null, "user@mail.com", "user");
-        Etudiant m1 = new Etudiant("123456", "Chaari", "Dorra", new Date(), "cv1.pdf", null, "test2@mail.com", "password");
-        Etudiant m2 = new Etudiant("321654", "Ghattasi", "Aycha", new Date(), "cv1.pdf", null, "test3@mail.com", "password");
-        EnseignantChercheur m3 = new EnseignantChercheur("464516", "Ben salem", "Aymen", new Date(), "cv1.pdf", null, "test@mail.com", "password");
+        Etudiant m = new Etudiant("65464646", "test1", "test", new Date(), "cv1.pdf", null, "user@mail.com", "user",new Date(),"sujet1","thèse");
+        Etudiant m1 = new Etudiant("123456", "Chaari", "Dorra", new Date(), "cv1.pdf", null, "test2@mail.com", "password",new Date(),"sujet2","mastère");
+        Etudiant m2 = new Etudiant("321654", "Ghattasi", "Aycha", new Date(), "cv1.pdf", null, "test3@mail.com", "password",new Date(),"sujet3","thèse");
+        EnseignantChercheur m3 = new EnseignantChercheur("464516", "Ben salem", "Aymen", new Date(), "cv1.pdf", null, "test@mail.com", "password","MA");
 
         Publication pub = new Publication("type3", new Date(), "lien2", "source1.pdf");
         Publication pub1 = new Publication("type1", new Date(), "lien1", "source1.pdf");

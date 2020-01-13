@@ -37,16 +37,36 @@ public class MemberRestController {
 
     @GetMapping(value = "/{id}")
     public MemberReturn findMembersById(@PathVariable("id") String publicId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-                MemberReturn mr = new MemberReturn();
-                BeanUtils.copyProperties(memberService.findDistinctByPublicID(publicId), mr);
-                return mr;
-            }
+        Member member = memberService.findDistinctByPublicID(publicId);
+        if (member != null) {
+            MemberReturn mr = new MemberReturn();
+            BeanUtils.copyProperties(member, mr);
+            return mr;
+        } else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
         }
-        return null;
+
+    }
+
+    @GetMapping(value = "/login")
+    public MemberReturn Login(@RequestParam("email") String email) {
+        if (email != null) {
+            Member member = memberService.findByEmail(email);
+            MemberReturn memberReturn;
+            if (member != null) {
+                if (member.toString().equals("Etudiant"))
+                    memberReturn = new EtudiantReturn();
+                else
+                    memberReturn = new EnseignantChercheurReturn();
+                BeanUtils.copyProperties(member, memberReturn);
+                return memberReturn;
+            } else {
+                throw new org.springframework.security.access.AccessDeniedException("401 returned");
+            }
+        } else {
+            throw new org.springframework.security.access.AccessDeniedException("401 returned");
+        }
+
     }
 
 
@@ -66,7 +86,6 @@ public class MemberRestController {
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN"))
                 memberService.deleteMember(publicId);
         }
-
     }
 
     @PutMapping(value = "/etudiant/{publicId}")
@@ -98,7 +117,6 @@ public class MemberRestController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-
                 Long id = memberService.findDistinctByPublicID(publicId).getId();
                 e.setId(id);
                 MemberReturn mr = new EnseignantChercheurReturn();

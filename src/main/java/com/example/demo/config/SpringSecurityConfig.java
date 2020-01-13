@@ -22,7 +22,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
-
     }
 
     @Override
@@ -30,9 +29,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/members/**").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.GET,"/members/**").permitAll()
+                .antMatchers(HttpMethod.GET,"login/**").authenticated()
                 .antMatchers(HttpMethod.POST,"/members/**").hasRole("ADMIN")
-                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
                 .and().httpBasic();
     }
 }

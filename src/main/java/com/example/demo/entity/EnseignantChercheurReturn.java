@@ -10,6 +10,7 @@ import java.util.List;
 public class EnseignantChercheurReturn extends MemberReturn implements Serializable {
     private String etablissement;
     private String grade;
+    private String type="enseignant";
     @JsonIgnore
     private List<EtudiantReturn> encadre;
 
@@ -42,6 +43,15 @@ public class EnseignantChercheurReturn extends MemberReturn implements Serializa
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public EnseignantChercheurReturn() {

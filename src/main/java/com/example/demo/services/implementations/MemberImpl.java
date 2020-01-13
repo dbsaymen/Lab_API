@@ -1,9 +1,10 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import com.example.demo.dao.MemberRepository;
 import com.example.demo.entity.EnseignantChercheur;
 import com.example.demo.entity.Etudiant;
 import com.example.demo.entity.Member;
+import com.example.demo.services.IMemberService;
 import com.example.demo.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

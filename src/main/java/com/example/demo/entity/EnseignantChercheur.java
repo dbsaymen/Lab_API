@@ -49,9 +49,9 @@ public class EnseignantChercheur extends Member implements Serializable {
     }
 
     public EnseignantChercheur(String cin, String nom, String prenom, Date dateNaissance, String cv, byte[] photo,
-                               String email, String password) {
+                               String email, String password,String grade) {
         super(cin, nom, prenom, dateNaissance, cv, photo, email, password);
-        // TODO Auto-generated constructor stub
+        this.grade=grade;
     }
 
     @Override
