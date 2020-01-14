@@ -94,10 +94,15 @@ public class MemberRestController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-                Long id = memberService.findDistinctByPublicID(publicId).getId();
-                e.setId(id);
+                Etudiant m =(Etudiant) memberService.findDistinctByPublicID(publicId);
+                if(e.getCin()!=null)m.setCin(e.getCin());
+                if(e.getEmail()!=null)m.setEmail(e.getEmail());
+                if(e.getCv()!=null)m.setCv(e.getCv());
+                if(e.getPassword()!=null)m.setPassword(e.getPassword());
+                if(e.getDiplome()!=null)m.setDiplome(e.getDiplome());
+                if(e.getDateInscription()!=null)m.setDateInscription(e.getDateInscription());
                 MemberReturn mr = new EtudiantReturn();
-                BeanUtils.copyProperties(memberService.updateMember(e), mr);
+                BeanUtils.copyProperties(memberService.updateMember(m), mr);
                 return mr;
             }
         }
@@ -117,10 +122,15 @@ public class MemberRestController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
-                Long id = memberService.findDistinctByPublicID(publicId).getId();
-                e.setId(id);
+                EnseignantChercheur m =(EnseignantChercheur) memberService.findDistinctByPublicID(publicId);
+                if(e.getCin()!=null)m.setCin(e.getCin());
+                if(e.getEmail()!=null)m.setEmail(e.getEmail());
+                if(e.getCv()!=null)m.setCv(e.getCv());
+                if(e.getPassword()!=null)m.setPassword(e.getPassword());
+                if(e.getEtablissement()!=null)m.setEtablissement(e.getEtablissement());
+                if(e.getGrade()!=null)m.setGrade(e.getGrade());
                 MemberReturn mr = new EnseignantChercheurReturn();
-                BeanUtils.copyProperties(memberService.updateMember(e), mr);
+                BeanUtils.copyProperties(memberService.updateMember(m), mr);
                 return mr;
             }
         }
