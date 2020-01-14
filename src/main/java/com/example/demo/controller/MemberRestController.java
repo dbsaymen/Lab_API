@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.List;
 public class MemberRestController {
     @Autowired
     IMemberService memberService;
+    @Autowired
+    PasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping(value = "/")
     public List<MemberReturn> findMembers() {
@@ -95,10 +98,16 @@ public class MemberRestController {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
                 Etudiant m =(Etudiant) memberService.findDistinctByPublicID(publicId);
+                if(e.getNom()!=null)m.setNom(e.getNom());
+                if(e.getPrenom()!=null)m.setPrenom(e.getPrenom());
                 if(e.getCin()!=null)m.setCin(e.getCin());
                 if(e.getEmail()!=null)m.setEmail(e.getEmail());
+                if(e.getDateNaissance()!=null)m.setDateNaissance(e.getDateNaissance());
+                if(e.getDateInscription()!=null)m.setDateInscription(e.getDateInscription());
+                if(e.getSujet()!=null)m.setSujet(e.getSujet());
+                if(e.getDiplome()!=null)m.setDiplome(e.getDiplome());
                 if(e.getCv()!=null)m.setCv(e.getCv());
-                if(e.getPassword()!=null)m.setPassword(e.getPassword());
+                if(e.getPassword()!=null)m.setPassword(this.bCryptPasswordEncoder.encode(e.getPassword()));
                 if(e.getDiplome()!=null)m.setDiplome(e.getDiplome());
                 if(e.getDateInscription()!=null)m.setDateInscription(e.getDateInscription());
                 MemberReturn mr = new EtudiantReturn();
@@ -123,10 +132,13 @@ public class MemberRestController {
             String currentUserName = authentication.getName();
             if (memberService.findByEmail(currentUserName).getPublicID().equals(publicId) || memberService.findByEmail(currentUserName).hasRole("ADMIN")) {
                 EnseignantChercheur m =(EnseignantChercheur) memberService.findDistinctByPublicID(publicId);
+                if(e.getNom()!=null)m.setNom(e.getNom());
+                if(e.getPrenom()!=null)m.setPrenom(e.getPrenom());
                 if(e.getCin()!=null)m.setCin(e.getCin());
+                if(e.getDateNaissance()!=null)m.setDateNaissance(e.getDateNaissance());
                 if(e.getEmail()!=null)m.setEmail(e.getEmail());
                 if(e.getCv()!=null)m.setCv(e.getCv());
-                if(e.getPassword()!=null)m.setPassword(e.getPassword());
+                if(e.getPassword()!=null)m.setPassword(this.bCryptPasswordEncoder.encode(e.getPassword()));
                 if(e.getEtablissement()!=null)m.setEtablissement(e.getEtablissement());
                 if(e.getGrade()!=null)m.setGrade(e.getGrade());
                 MemberReturn mr = new EnseignantChercheurReturn();
